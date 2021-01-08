@@ -2,7 +2,7 @@
  *
  */
 const express = require('express')
-const open = require('open')
+// const open = require('open')
 const cookieParser = require('cookie-parser')
 const multer = require('multer')
 const fsp = require('fs').promises
@@ -16,7 +16,6 @@ const _ = require('lodash')
 const uploader = multer({ dest: __dirname + /uploads/ })
 
 const app = express()
-// const port = process.env.PORT || 8081
 const port = 8081
 
 /**
@@ -286,56 +285,22 @@ app
     const user = await db.get('SELECT * FROM users WHERE email = ?', email)
 
     if (user) {
-      const changePasswordId = Math.random().toString(16).slice(2)
-
-      changePasswordMap[changePasswordId] = user
-      setTimeout(() => {
-        delete changePasswordMap[changePasswordId]
-      }, 1000 * 60 * 10)
-
-      const changePasswordLink = `http://localhost:${port}/change-password/${changePasswordId}`
-
-      console.log(changePasswordLink)
-      res.end(
-        'A link has been sent to your email, open your Inbox and click the link to change your password.'
-      )
-      console.log(changePasswordMap)
-
-      // sendEmail(email, `
-      //   请点击些链接以修改密码：
-      //   ${changePasswordLink}
-      //   如果以上链接不能点击，请复制到浏览器后打开。
-      //   该链接10分钟内有效
-      // `)
-      // sendTextMsg(13888888888, '您的验证码是 [${323423}]  fasldflaksjdfasdflk')
-    } else {
-      res.end('This email has not been registered in this web site')
+      //
     }
   })
 
 app
   .route('/change-password/:id')
   .get(async (req, res, next) => {
-    const user = changePasswordMap[req.params.id]
-
     if (user) {
-      // res.render('change-password.pug', {
-      //   user: user,
-      // })
+      //
       alert('暂未完成此功能')
     } else {
       res.end('link has expired')
     }
   })
   .post(async (req, res, next) => {
-    const user = changePasswordMap[req.params.id]
-
-    await db.run(
-      'UPDATE users SET password = ? WHERE name = ?',
-      req.body.password,
-      user.name
-    )
-    delete changePasswordMap[req.params.id]
+    //
     res.end('password changed successfully!')
   })
 
@@ -403,7 +368,6 @@ app.get('/vote/:id', async (req, res, next) => {
     'SELECT votings.rowid AS id, * FROM votings JOIN user ON userId = user.id WHERE voteId = ?',
     id
   )
-  // console.log(votings)
 
   vote.options = options
   vote.votings = votings
